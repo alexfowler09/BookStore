@@ -1,0 +1,15 @@
+<div class="container">
+  <div style="text-align: center">
+    <br/>
+    <h2 class="jumbotron bg-secondary text-white">{{title}}</h2>
+  </div>
+  <nav [ngClass] = "'menu'">
+    <a [routerLink]="['/home']" routerLinkActive="active-link">Lista de Todos os Livros</a> |        
+    <a [routerLink]="['/home']" [queryParams]="{inStock: 'true'}" routerLinkActive="active-link">Lista de Livros Em Estoque</a> |        
+    <a routerLink="/manage-book" routerLinkActive="active-link">Criar Novo</a>
+  </nav>  
+  <br/>
+  <div>	
+    <router-outlet></router-outlet>	
+  </div> 
+</div>

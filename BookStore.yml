@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+    bookstore:
+        image: bookstore
+        ports:
+            - '64862:64861'

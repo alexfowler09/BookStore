@@ -1,0 +1,28 @@
+<table class="table table-sm table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th>Título</th>
+      <th>Qtde Estoque</th>
+      <th>Author</th>
+      <th>Editar</th>
+      <th>Excluir</th>
+    </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let book of bookService.bookList">
+    <td>{{book.Title}}</td>
+    <td>{{book.StockQty}}</td>
+    <td>{{book.Author.Name}}</td>
+    <td>
+      <a class="btn" [routerLink]="['/manage-book', book.Id]">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+    </td>
+    <td>
+        <a class="btn text-danger" (click)="onDelete(book.Id)">
+          <i class="fa fa-trash-o"></i>
+        </a>      
+    </td>
+  </tr>
+</tbody>
+</table>
