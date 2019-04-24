@@ -16,14 +16,14 @@ namespace BookStore.Application.Services
             _authorService = authorService;
         }
 
-        public void Add(AuthorViewModel book)
+        public void Add(AuthorViewModel author)
         {
-            _authorService.Add(MapViewModelToEntity(book));
+            _authorService.Add(MapViewModelToEntity(author));
         }
 
-        public void Update(AuthorViewModel book)
+        public void Update(AuthorViewModel author)
         {
-            _authorService.Update(MapViewModelToEntity(book));
+            _authorService.Update(MapViewModelToEntity(author));
         }
 
         public AuthorViewModel GetBydId(Guid id)

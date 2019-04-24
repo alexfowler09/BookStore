@@ -1,11 +1,12 @@
-﻿using BookStore.Domain.Interfaces.Repositories;
+﻿using BookStore.Domain.Interfaces.Entities;
+using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 
 namespace BookStore.Domain.Services
 {
-    public class BaseService<TEntity> : IDisposable, IBaseService<TEntity> where TEntity : class
+    public class BaseService<TEntity> : IDisposable, IBaseService<TEntity> where TEntity : class, IEntity
     {
         private readonly IBaseRepository<TEntity> _baseRepository;
 

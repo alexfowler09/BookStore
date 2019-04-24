@@ -1,4 +1,5 @@
-﻿using BookStore.Domain.Interfaces.Repositories;
+﻿using BookStore.Domain.Interfaces.Entities;
+using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace BookStore.Infra.Data.Repositories
 {
-    public class BaseRepository<TEntity> : IDisposable, IBaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IDisposable, IBaseRepository<TEntity> where TEntity : class, IEntity
     {
         private readonly BookStoreContext _context;
 
@@ -25,7 +26,7 @@ namespace BookStore.Infra.Data.Repositories
 
         public virtual IEnumerable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>().AsNoTracking().ToList();
+            return _context.Set<TEntity>().ToList();
         }
 
         public virtual TEntity GetById(Guid id)
@@ -40,7 +41,7 @@ namespace BookStore.Infra.Data.Repositories
         }
 
         public TEntity Update(TEntity obj)
-        {            
+        {    
             _context.Entry(obj).State = EntityState.Modified;
             _context.SaveChanges();
             return obj;

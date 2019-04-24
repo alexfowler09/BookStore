@@ -71,7 +71,12 @@ namespace BookStore.Application.Services
 
         public void Update(BookViewModel book)
         {
-            _bookService.Update(MapViewModelToEntity(book));            
+            var updatedBook = _bookService.GetBydId(book.Id.Value);
+            updatedBook.Title = book.Title;
+            updatedBook.StockQty = book.StockQty;
+            updatedBook.AuthorId = book.AuthorId;
+                  
+            _bookService.Update(updatedBook);
         }
 
         public void Remove(BookViewModel book)

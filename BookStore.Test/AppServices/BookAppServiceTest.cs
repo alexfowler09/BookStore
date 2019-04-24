@@ -117,7 +117,7 @@ namespace BookStore.Test.AppServices
             bookViewModel.Title = "testando";
             bookViewModel.StockQty = 55;
 
-            Utils.DetachAllEntities(Db);
+            // Utils.DetachAllEntities(Db);
 
             ServiceUpdate(bookViewModel);
 

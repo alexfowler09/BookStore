@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BookStore.Domain.Interfaces.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace BookStore.Domain.Entities
 {
-    public class Author
+    public class Author : IEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

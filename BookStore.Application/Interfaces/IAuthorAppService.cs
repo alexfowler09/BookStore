@@ -6,11 +6,11 @@ namespace BookStore.Application.Interfaces
 {
     public interface IAuthorAppService
     {
-        void Add(AuthorViewModel book);
-        void Update(AuthorViewModel book);
+        void Add(AuthorViewModel author);
+        void Update(AuthorViewModel author);
         AuthorViewModel GetBydId(Guid id);
         IEnumerable<AuthorViewModel> GetAll();        
-        void Remove(AuthorViewModel book);
+        void Remove(AuthorViewModel author);
         void Dispose();
     }
 }

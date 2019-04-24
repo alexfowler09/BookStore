@@ -19,8 +19,7 @@ namespace BookStore.Infra.Data.Repositories
 
         public override Book GetById(Guid id)
         {
-            return _context.Books
-                .AsNoTracking()
+            return _context.Books                
                 .Include(a => a.Author)
                 .FirstOrDefault(b => b.Id == id);
         }

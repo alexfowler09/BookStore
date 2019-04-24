@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 
 namespace BookStore.Test
 {
@@ -19,15 +18,5 @@ namespace BookStore.Test
 
             return db;
         }
-
-        public static void DetachAllEntities(DbContext db)
-        {
-            var changedEntriesCopy = db.ChangeTracker.Entries()                
-                .ToList();
-
-            foreach (var entry in changedEntriesCopy)
-                entry.State = EntityState.Detached;
-        }
-
     }
 }
