@@ -8,7 +8,7 @@ using System.Net;
 
 namespace BookStore.Api.Controllers
 {
-    [Route("book")]
+    [Route("api/book")]
     public class BookController : Controller
     {
         private readonly IBookAppService _bookAppService;
@@ -19,6 +19,7 @@ namespace BookStore.Api.Controllers
         }
         
         [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public IEnumerable<BookViewModel> GetAll()
         {
             return _bookAppService.GetAllByTitleAscending();
@@ -26,18 +27,27 @@ namespace BookStore.Api.Controllers
 
         [HttpGet]
         [Route("instock")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public IEnumerable<BookViewModel> GetAllInStock()
         {
             return _bookAppService.GetInStockByTitleAscending();
         }
 
         [HttpGet("{id:guid}")]
-        public BookViewModel GetById(Guid Id)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult GetById(Guid id)
         {
-            return _bookAppService.GetBydId(Id);            
+            var ret = _bookAppService.GetBydId(id);
+            if (ret == null)
+                return NotFound();
+            else            
+                return Ok(ret);            
         }
 
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Insert([FromBody] BookViewModel book)
         {
             List<string> validation = new List<string>();
@@ -56,16 +66,15 @@ namespace BookStore.Api.Controllers
 
                 _bookAppService.Add(book);
 
-                return Ok(new
-                {
-                    book
-                });
+                return Ok(book);
             }
 
             return BadRequest();
         }
 
         [HttpPut("{id:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Update([FromBody] BookViewModel book)
         {
             List<string> validation = new List<string>();
@@ -84,9 +93,7 @@ namespace BookStore.Api.Controllers
 
                 _bookAppService.Update(book);
 
-                return Ok(new {
-                    book
-                });
+                return Ok(book);
             }
 
             return BadRequest();

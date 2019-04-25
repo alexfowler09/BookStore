@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace BookStore.Api
 {
@@ -36,6 +37,11 @@ namespace BookStore.Api
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            services.AddSwaggerGen(x =>
+            {                
+                x.SwaggerDoc("v1", new Info { Title = $"API BookStore", Version = "v1" });
+            });
 
             RegisterServices(services);
         }
@@ -58,7 +64,11 @@ namespace BookStore.Api
                 c.AllowAnyOrigin();
             });
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
+
+            app.UseSwagger(x => x.RouteTemplate = "swagger/{documentName}/swagger.json");
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"API BookStore v1"));
+
             app.UseMvc();
         }
 

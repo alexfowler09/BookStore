@@ -18,7 +18,7 @@ namespace BookStore.Infra.Data.Repositories
         }
 
         public TEntity Add(TEntity obj)
-        {
+        {   
             _context.Set<TEntity>().Add(obj);
             _context.SaveChanges();
             return obj;

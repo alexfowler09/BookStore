@@ -2,10 +2,11 @@
 using BookStore.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net;
 
 namespace BookStore.Api.Controllers
 {
-    [Route("author")]
+    [Route("api/author")]
     public class AuthorController : Controller
     {
         private readonly IAuthorAppService _authorAppService;
@@ -16,6 +17,7 @@ namespace BookStore.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public IEnumerable<AuthorViewModel> GetAll()
         {
             return _authorAppService.GetAll();

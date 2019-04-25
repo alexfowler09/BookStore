@@ -55,7 +55,8 @@ namespace BookStore.Application.Services
 
         public BookViewModel GetBydId(Guid id)
         {
-            return MapEntityToViewModel(_bookService.GetBydId(id));
+            var book = _bookService.GetBydId(id);            
+            return MapEntityToViewModel(book);
         }
 
         public IEnumerable<BookViewModel> GetAll()
@@ -106,20 +107,22 @@ namespace BookStore.Application.Services
 
         private BookViewModel MapEntityToViewModel(Book book)
         {
-            var ret = new BookViewModel();
-
-            if (book != null)
+            if (book == null)
+                return null;
+            else
             {
+                var ret = new BookViewModel();
+                
                 ret.Id = book.Id;
                 ret.Title = book.Title;
                 ret.StockQty = book.StockQty;
                 ret.AuthorId = book.AuthorId;
 
                 ret.Author.Id = book.AuthorId;
-                ret.Author.Name = book.Author.Name;
-            }
+                ret.Author.Name = book.Author.Name;                
 
-            return ret;
+                return ret;
+            }
         }        
     }
 }
