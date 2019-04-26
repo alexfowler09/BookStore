@@ -76,7 +76,7 @@ namespace BookStore.Api.Controllers
             if (_domainNotificationHandler.HasNotifications())
                 return BadRequest(_domainNotificationHandler.GetNotifications());
 
-            return Ok(book);
+            return Ok(_bookAppService.GetById(book.Id.Value));
         }
 
         [HttpDelete("{id:guid}")]
