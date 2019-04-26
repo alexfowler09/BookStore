@@ -4,7 +4,7 @@ Projeto de Testes
 
 ## TODO List
 
-* Criar validações do modelo
+* Refatorar repositorio preparando para MS
 * Ajustar testes
 * Adicionar swagger
 * Adicionar Jwt
