@@ -1,16 +1,18 @@
 ﻿using BookStore.Application.ViewModels;
+using BookStore.Domain;
 using System;
 using System.Collections.Generic;
 
 namespace BookStore.Application.Interfaces
 {
-    public interface IAuthorAppService
+    public interface IAuthorAppService : IDisposable
     {
-        void Add(AuthorViewModel author);
-        void Update(AuthorViewModel author);
-        AuthorViewModel GetBydId(Guid id);
-        IEnumerable<AuthorViewModel> GetAll();        
-        void Remove(AuthorViewModel author);
-        void Dispose();
+        List<ValidationError> Validations { get; }
+
+        bool Add(AuthorViewModel author);
+        bool Update(AuthorViewModel author);
+        AuthorViewModel GetById(Guid id);
+        IEnumerable<AuthorViewModel> GetAll();
+        bool Remove(Guid id);
     }
 }

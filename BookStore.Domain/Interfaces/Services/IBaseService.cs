@@ -1,15 +1,15 @@
-﻿using System;
+﻿using BookStore.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace BookStore.Domain.Interfaces.Services
 {
-    public interface IBaseService<TEntity> where TEntity : class
+    public interface IBaseService<TEntity> : IDisposable where TEntity : Entity<TEntity>
     {
-        TEntity Add(TEntity obj);
+        void Add(TEntity obj);
         TEntity GetBydId(Guid id);
         IEnumerable<TEntity> GetAll();
-        TEntity Update(TEntity obj);
-        void Remove(TEntity obj);
-        void Dispose();
+        void Update(TEntity obj);
+        void Remove(Guid id);
     }
 }

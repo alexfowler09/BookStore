@@ -1,6 +1,7 @@
 ﻿using BookStore.Api.Extensions;
 using BookStore.Application.Interfaces;
 using BookStore.Application.ViewModels;
+using BookStore.Domain.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace BookStore.Api.Controllers
     public class BookController : Controller
     {
         private readonly IBookAppService _bookAppService;
+        private readonly IDomainNotificationHandler _domainNotificationHandler;
 
-        public BookController(IBookAppService bookAppService)
+        public BookController(IBookAppService bookAppService, IDomainNotificationHandler domainNotificationHandler)
         {
             _bookAppService = bookAppService;
+            _domainNotificationHandler = domainNotificationHandler;
         }
         
         [HttpGet]
@@ -38,85 +41,51 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetById(Guid id)
         {
-            var ret = _bookAppService.GetBydId(id);
+            var ret = _bookAppService.GetById(id);
             if (ret == null)
                 return NotFound();
-            else            
-                return Ok(ret);            
+            
+            return Ok(ret);
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Insert([FromBody] BookViewModel book)
+        public IActionResult Add([FromBody] BookViewModel book)
         {
-            List<string> validation = new List<string>();
+            if (!_bookAppService.Add(book))            
+                return BadRequest(_bookAppService.Validations);
 
-            if (book != null && book.Id == null)
-            {
-                book.Id = Guid.NewGuid();
-                validation.AddIfNotNull(_bookAppService.ValidateTitle(book));                
-                if (validation.Count > 0)
-                {
-                    return BadRequest(new
-                    {
-                        errors = validation
-                    });
-                }
+            if (_domainNotificationHandler.HasNotifications())
+                return BadRequest(_domainNotificationHandler.GetNotifications());
 
-                _bookAppService.Add(book);
-
-                return Ok(book);
-            }
-
-            return BadRequest();
+            return Ok(book);
         }
 
         [HttpPut("{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult Update([FromBody] BookViewModel book)
         {
-            List<string> validation = new List<string>();
+            if (!_bookAppService.Update(book))
+                return NotFound(book);
 
-            if (book != null && book.Id != null)
-            {
-                validation.AddIfNotNull(_bookAppService.ValidateTitle(book));
-                validation.AddIfNotNull(_bookAppService.ValidateNotNullRecord(book.Id.Value));
-                if (validation.Count > 0)
-                {
-                    return BadRequest(new
-                    {
-                        errors = validation
-                    });
-                }
+            if (_domainNotificationHandler.HasNotifications())
+                return BadRequest(_domainNotificationHandler.GetNotifications());
 
-                _bookAppService.Update(book);
-
-                return Ok(book);
-            }
-
-            return BadRequest();
+            return Ok(book);
         }
 
         [HttpDelete("{id:guid}")]
-        public IActionResult Delete(Guid id)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult Remove(Guid id)
         {
-            List<string> validation = new List<string>();
+            if (!_bookAppService.Remove(id))
+                return NotFound();
 
-            validation.AddIfNotNull(_bookAppService.ValidateNotNullRecord(id));                
-
-            if (validation.Count > 0)
-            {
-                return BadRequest(new
-                {
-                    errors = validation
-                });
-            }
-
-            _bookAppService.Remove(_bookAppService.GetBydId(id));
-
-            return StatusCode((int)HttpStatusCode.NoContent);
+            return Ok();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BookStore.Application.Services;
 using BookStore.Application.ViewModels;
 using BookStore.Domain.Entities;
+using BookStore.Domain.Notifications;
 using BookStore.Domain.Services;
 using BookStore.Infra.Data.Context;
 using BookStore.Infra.Data.Repositories;
@@ -20,14 +21,16 @@ namespace BookStore.Test.AppServices
         private BookRepository bookRepository { get; }
         private BookService bookService { get; }
         private BookAppService bookAppService { get; }
+        private DomainNotificationHandler domainNotificationHandler { get; }
 
         public BookAppServiceTest()
         {
             Db = Utils.GetDbContext<BookStoreContext>();
             MockRepository = new EFMockRepository(Db);
 
+            domainNotificationHandler = new DomainNotificationHandler();
             bookRepository = new BookRepository(Db);
-            bookService = new BookService(bookRepository);
+            bookService = new BookService(bookRepository, domainNotificationHandler);
             bookAppService = new BookAppService(bookService);
         }
 
@@ -133,7 +136,7 @@ namespace BookStore.Test.AppServices
 
         private BookViewModel ServiceGetById(Guid id)
         {
-            return bookAppService.GetBydId(id);
+            return bookAppService.GetById(id);
         }
 
         private void ServiceUpdate(BookViewModel book)

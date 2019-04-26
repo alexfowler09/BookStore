@@ -1,23 +1,21 @@
 ﻿using BookStore.Application.ViewModels;
-using BookStore.Domain.Entities;
+using BookStore.Domain;
 using System;
 using System.Collections.Generic;
 
 namespace BookStore.Application.Interfaces
 {
-    public interface IBookAppService
+    public interface IBookAppService: IDisposable
     {
-        void Add(BookViewModel book);
-        void Update(BookViewModel book);
-        BookViewModel GetBydId(Guid id);
+        List<ValidationError> Validations { get; }
+
+        bool Add(BookViewModel book);
+        bool Update(BookViewModel book);
+        BookViewModel GetById(Guid id);
         IEnumerable<BookViewModel> GetAll();        
-        void Remove(BookViewModel book);
-        void Dispose();
+        bool Remove(Guid id);
 
         IEnumerable<BookViewModel> GetAllByTitleAscending();
         IEnumerable<BookViewModel> GetInStockByTitleAscending();
-
-        string ValidateTitle(BookViewModel book);
-        string ValidateNotNullRecord(Guid id);
     }
 }

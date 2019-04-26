@@ -1,19 +1,23 @@
 ﻿using BookStore.Application.Interfaces;
 using BookStore.Application.ViewModels;
+using BookStore.Domain;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BookStore.Application.Services
 {    
     public class BookAppService : IBookAppService
     {
         private readonly IBookService _bookService;
+        public List<ValidationError> Validations { get; private set; }
 
         public BookAppService(IBookService bookService)
         {
             _bookService = bookService;
+            Validations = new List<ValidationError>();
         }
 
         public IEnumerable<BookViewModel> GetAllByTitleAscending()
@@ -38,22 +42,18 @@ namespace BookStore.Application.Services
             return ret;            
         }
 
-        public string ValidateTitle(BookViewModel book)
+        public bool Add(BookViewModel book)
         {
-            return _bookService.ValidateTitle(MapViewModelToEntity(book));
+            var newBook = MapViewModelToEntity(book);
+
+            if (!IsBusinessValid(newBook))
+                return false;
+
+            _bookService.Add(newBook);
+            return true;
         }
 
-        public string ValidateNotNullRecord(Guid id)
-        {
-            return _bookService.ValidateNotNullRecord(id);
-        }
-
-        public void Add(BookViewModel book)
-        {
-            _bookService.Add(MapViewModelToEntity(book));     
-        }
-
-        public BookViewModel GetBydId(Guid id)
+        public BookViewModel GetById(Guid id)
         {
             var book = _bookService.GetBydId(id);            
             return MapEntityToViewModel(book);
@@ -70,24 +70,43 @@ namespace BookStore.Application.Services
             return ret;
         }
 
-        public void Update(BookViewModel book)
+        public bool Update(BookViewModel book)
         {
             var updatedBook = _bookService.GetBydId(book.Id.Value);
+
+            if (updatedBook == null)
+            {
+                Validations.Add(new ValidationError("Book", "Registro não encontrado para o Id informado"));
+                return false;
+            }
+
             updatedBook.Title = book.Title;
             updatedBook.StockQty = book.StockQty;
             updatedBook.AuthorId = book.AuthorId;
-                  
+
+            if (!IsBusinessValid(updatedBook))
+                return false;
+
             _bookService.Update(updatedBook);
+
+            return true;
         }
 
-        public void Remove(BookViewModel book)
+        private bool IsBusinessValid(Book book)
         {
-            _bookService.Remove(MapViewModelToEntity(book));            
+            if (_bookService.ValidateTitle(book.Id, book.Title))            
+                Validations.Add(new ValidationError("Book", "Já existe um livro cadastrado com o título informado"));
+
+            return Validations.Any();
         }
 
-        public void Dispose()
+        public bool Remove(Guid id)
         {
-            _bookService.Dispose();
+            if (_bookService.GetBydId(id) == null)
+                return false;
+
+            _bookService.Remove(id);
+            return true;            
         }
 
         private Book MapViewModelToEntity(BookViewModel book)
@@ -123,6 +142,23 @@ namespace BookStore.Application.Services
 
                 return ret;
             }
-        }        
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                _bookService.Dispose();
+        }
+
+        ~BookAppService()
+        {
+            Dispose(false);
+        }
     }
 }

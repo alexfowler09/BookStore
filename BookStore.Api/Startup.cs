@@ -6,6 +6,7 @@ using BookStore.Application.Interfaces;
 using BookStore.Application.Services;
 using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Domain.Interfaces.Services;
+using BookStore.Domain.Notifications;
 using BookStore.Domain.Services;
 using BookStore.Infra.Data.Context;
 using BookStore.Infra.Data.Repositories;
@@ -85,6 +86,8 @@ namespace BookStore.Api
 
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+            services.AddScoped<IDomainNotificationHandler, DomainNotificationHandler>();
         }
     }
 }

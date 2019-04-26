@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.Interfaces;
 using BookStore.Application.ViewModels;
+using BookStore.Domain;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Services;
 using System;
@@ -10,23 +11,38 @@ namespace BookStore.Application.Services
     public class AuthorAppService : IAuthorAppService
     {
         private readonly IAuthorService _authorService;
+        public List<ValidationError> Validations { get; private set; }
 
         public AuthorAppService(IAuthorService authorService)            
         {
             _authorService = authorService;
         }
 
-        public void Add(AuthorViewModel author)
+        public bool Add(AuthorViewModel author)
         {
-            _authorService.Add(MapViewModelToEntity(author));
+            var newAuthor = MapViewModelToEntity(author);
+
+            _authorService.Add(newAuthor);
+            return true;
         }
 
-        public void Update(AuthorViewModel author)
+        public bool Update(AuthorViewModel author)
         {
-            _authorService.Update(MapViewModelToEntity(author));
+            var updatedAuthor = _authorService.GetBydId(author.Id.Value);
+
+            if (updatedAuthor == null)
+            {
+                Validations.Add(new ValidationError("Author", "Registro não encontrado para o Id informado"));
+                return false;
+            }
+
+            updatedAuthor.Name = author.Name;
+            _authorService.Update(updatedAuthor);
+
+            return true;
         }
 
-        public AuthorViewModel GetBydId(Guid id)
+        public AuthorViewModel GetById(Guid id)
         {
             return MapEntityToViewModel(_authorService.GetBydId(id));
         }
@@ -42,14 +58,13 @@ namespace BookStore.Application.Services
             return ret;            
         }
 
-        public void Remove(AuthorViewModel author)
+        public bool Remove(Guid id)
         {
-            _authorService.Remove(MapViewModelToEntity(author));
-        }
+            if (_authorService.GetBydId(id) == null)
+                return false;
 
-        public void Dispose()
-        {
-            _authorService.Dispose();
+            _authorService.Remove(id);
+            return true;            
         }
 
         private AuthorViewModel MapEntityToViewModel(Author author)
@@ -76,6 +91,23 @@ namespace BookStore.Application.Services
             }
 
             return ret;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                _authorService.Dispose();
+        }
+
+        ~AuthorAppService()
+        {
+            Dispose(false);
         }
     }
 }

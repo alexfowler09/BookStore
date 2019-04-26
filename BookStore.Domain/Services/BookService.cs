@@ -1,6 +1,7 @@
 ﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Domain.Interfaces.Services;
+using BookStore.Domain.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +12,15 @@ namespace BookStore.Domain.Services
     {
         private readonly IBookRepository _bookRepository;
 
-        public BookService(IBookRepository bookRepository) :
-            base(bookRepository)
+        public BookService(IBookRepository bookRepository, IDomainNotificationHandler domainNotificationHandler) :
+            base(bookRepository, domainNotificationHandler)
         {
             _bookRepository = bookRepository;
         }
 
-        public string ValidateNotNullRecord(Guid id)
-        {
-            if (_bookRepository.GetById(id) == null)
-                return "Não existe registro para o Id informado";
-
-            return null;
-        }
-
-        public string ValidateTitle(Book book)
+        public bool ValidateTitle(Guid id, string title)
         {   
-            if (_bookRepository.GetAll().Where(x => x.Title == book.Title && x.Id != book.Id).Count() > 0)
-                return "Já existe um outro livro com este título";
-
-            return null;
+            return _bookRepository.GetAll().Any(x => x.Title == title && x.Id != id);
         }
 
         public IEnumerable<Book> GetAllByTitleAscending()
@@ -41,6 +31,6 @@ namespace BookStore.Domain.Services
         public IEnumerable<Book> GetInStockByTitleAscending()
         {
             return _bookRepository.GetInStockByTitleAscending();
-        }
+        }        
     }
 }

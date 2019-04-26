@@ -1,4 +1,4 @@
-﻿using BookStore.Domain.Interfaces.Entities;
+﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace BookStore.Infra.Data.Repositories
 {
-    public class BaseRepository<TEntity> : IDisposable, IBaseRepository<TEntity> where TEntity : class, IEntity
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : Entity<TEntity>
     {
         private readonly BookStoreContext _context;
 
@@ -17,11 +17,10 @@ namespace BookStore.Infra.Data.Repositories
             _context = context;
         }
 
-        public TEntity Add(TEntity obj)
-        {   
+        public void Add(TEntity obj)
+        {
             _context.Set<TEntity>().Add(obj);
             _context.SaveChanges();
-            return obj;
         }
 
         public virtual IEnumerable<TEntity> GetAll()
@@ -34,22 +33,34 @@ namespace BookStore.Infra.Data.Repositories
             return _context.Set<TEntity>().Find(id);
         }
 
-        public void Remove(TEntity obj)
+        public void Remove(Guid id)
         {
+            var obj = _context.Set<TEntity>().Find(id);
             _context.Set<TEntity>().Remove(obj);
             _context.SaveChanges();
         }
 
-        public TEntity Update(TEntity obj)
-        {    
+        public void Update(TEntity obj)
+        {
             _context.Entry(obj).State = EntityState.Modified;
             _context.SaveChanges();
-            return obj;
         }
 
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                _context.Dispose();
+        }
+
+        ~BaseRepository()
+        {
+            Dispose(false);
         }
     }
 }

@@ -1,23 +1,29 @@
-﻿using BookStore.Domain.Interfaces.Entities;
+﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Domain.Interfaces.Services;
+using BookStore.Domain.Notifications;
 using System;
 using System.Collections.Generic;
 
 namespace BookStore.Domain.Services
 {
-    public class BaseService<TEntity> : IDisposable, IBaseService<TEntity> where TEntity : class, IEntity
+    public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : Entity<TEntity>
     {
         private readonly IBaseRepository<TEntity> _baseRepository;
+        private readonly IDomainNotificationHandler _domainNotificationHandler;
 
-        public BaseService(IBaseRepository<TEntity> baseRepository)
+        protected BaseService(IBaseRepository<TEntity> baseRepository, IDomainNotificationHandler domainNotificationHandler)
         {
             _baseRepository = baseRepository;
+            _domainNotificationHandler = domainNotificationHandler;
         }
 
-        public TEntity Add(TEntity obj)
+        public void Add(TEntity obj)
         {
-            return _baseRepository.Add(obj);
+            if (obj.IsValid())
+                _baseRepository.Add(obj);
+            else
+                NotifyDomain(obj.Validations);
         }
 
         public IEnumerable<TEntity> GetAll()
@@ -30,19 +36,40 @@ namespace BookStore.Domain.Services
             return _baseRepository.GetById(id);
         }
 
-        public void Remove(TEntity obj)
+        public void Remove(Guid id)
         {
-            _baseRepository.Remove(obj);
+            _baseRepository.Remove(id);
         }
 
-        public TEntity Update(TEntity obj)
-        {
-            return _baseRepository.Update(obj);
+        public void Update(TEntity obj)
+        {            
+            if (obj.IsValid())
+                _baseRepository.Update(obj);
+            else
+                NotifyDomain(obj.Validations);
         }
+
+        private void NotifyDomain(List<ValidationError> errors)
+        {
+            foreach (var error in errors)            
+                _domainNotificationHandler.Add(new DomainNotification(error.PropertyName, error.ErrorMessage));            
+        }                
 
         public void Dispose()
         {
-            _baseRepository.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {   
+            if (disposing)            
+                _baseRepository.Dispose();
+        }
+
+        ~BaseService()
+        {
+            Dispose(false);
         }
     }
 }
