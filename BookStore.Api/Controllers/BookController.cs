@@ -53,13 +53,15 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Add([FromBody] BookViewModel book)
         {
-            if (!_bookAppService.Add(book))            
+            var newId = _bookAppService.Add(book);
+
+            if (newId == null)            
                 return BadRequest(_bookAppService.Validations);
 
             if (_domainNotificationHandler.HasNotifications())
                 return BadRequest(_domainNotificationHandler.GetNotifications());
 
-            return Ok(book);
+            return Ok(_bookAppService.GetById(newId.Value));
         }
 
         [HttpPut("{id:guid}")]

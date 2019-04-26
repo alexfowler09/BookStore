@@ -42,15 +42,15 @@ namespace BookStore.Application.Services
             return ret;            
         }
 
-        public bool Add(BookViewModel book)
+        public Guid? Add(BookViewModel book)
         {
             var newBook = MapViewModelToEntity(book);
 
             if (!IsBusinessValid(newBook))
-                return false;
+                return null;
 
             _bookService.Add(newBook);
-            return true;
+            return newBook.Id;
         }
 
         public BookViewModel GetById(Guid id)

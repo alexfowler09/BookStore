@@ -18,12 +18,12 @@ namespace BookStore.Application.Services
             _authorService = authorService;
         }
 
-        public bool Add(AuthorViewModel author)
+        public Guid? Add(AuthorViewModel author)
         {
             var newAuthor = MapViewModelToEntity(author);
 
             _authorService.Add(newAuthor);
-            return true;
+            return newAuthor.Id;
         }
 
         public bool Update(AuthorViewModel author)

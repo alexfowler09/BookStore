@@ -9,7 +9,7 @@ namespace BookStore.Application.Interfaces
     {
         List<ValidationError> Validations { get; }
 
-        bool Add(BookViewModel book);
+        Guid? Add(BookViewModel book);
         bool Update(BookViewModel book);
         BookViewModel GetById(Guid id);
         IEnumerable<BookViewModel> GetAll();        
