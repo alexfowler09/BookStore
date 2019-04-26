@@ -94,10 +94,10 @@ namespace BookStore.Application.Services
 
         private bool IsBusinessValid(Book book)
         {
-            if (_bookService.ValidateTitle(book.Id, book.Title))            
+            if (_bookService.TitleExists(book.Id, book.Title))            
                 Validations.Add(new ValidationError("Book", "Já existe um livro cadastrado com o título informado"));
 
-            return Validations.Any();
+            return !Validations.Any();
         }
 
         public bool Remove(Guid id)
@@ -115,7 +115,7 @@ namespace BookStore.Application.Services
 
             if (book != null)
             {
-                ret.Id = book.Id.Value;
+                ret.Id = book.Id.HasValue ? book.Id.Value : Guid.NewGuid();
                 ret.Title = book.Title;
                 ret.StockQty = book.StockQty;
                 ret.AuthorId = book.AuthorId;

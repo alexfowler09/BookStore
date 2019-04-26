@@ -18,9 +18,9 @@ namespace BookStore.Domain.Services
             _bookRepository = bookRepository;
         }
 
-        public bool ValidateTitle(Guid id, string title)
+        public bool TitleExists(Guid id, string title)
         {   
-            return _bookRepository.GetAll().Any(x => x.Title == title && x.Id != id);
+            return _bookRepository.GetAll().Any(x => x.Title == title && x.Id != id);            
         }
 
         public IEnumerable<Book> GetAllByTitleAscending()

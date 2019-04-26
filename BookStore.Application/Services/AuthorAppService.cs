@@ -13,7 +13,7 @@ namespace BookStore.Application.Services
         private readonly IAuthorService _authorService;
         public List<ValidationError> Validations { get; private set; }
 
-        public AuthorAppService(IAuthorService authorService)            
+        public AuthorAppService(IAuthorService authorService)
         {
             _authorService = authorService;
         }
@@ -86,7 +86,7 @@ namespace BookStore.Application.Services
 
             if (author != null)
             {
-                ret.Id = author.Id.Value;
+                ret.Id = author.Id.HasValue ? author.Id.Value : Guid.NewGuid();                
                 ret.Name = author.Name;
             }
 

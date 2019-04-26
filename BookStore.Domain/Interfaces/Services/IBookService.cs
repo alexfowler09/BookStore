@@ -8,6 +8,6 @@ namespace BookStore.Domain.Interfaces.Services
     {
         IEnumerable<Book> GetAllByTitleAscending();
         IEnumerable<Book> GetInStockByTitleAscending();
-        bool ValidateTitle(Guid id, string title);        
+        bool TitleExists(Guid id, string title);        
     }
 }

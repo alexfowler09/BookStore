@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BookStore.Domain.Entities
 {
@@ -11,7 +12,17 @@ namespace BookStore.Domain.Entities
 
         public override bool IsValid()
         {
-            return true;
+            Validate();
+            return !Validations.Any();
+        }
+
+        private void Validate()
+        {
+            if (this.Name == null)
+                Validations.Add(new ValidationError("Name", "Nome não pode ser nulo"));
+
+            if (this.Name == string.Empty)
+                Validations.Add(new ValidationError("Name", "Nome não pode ser vazio"));
         }
     }
 }
