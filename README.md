@@ -4,9 +4,14 @@ Projeto de Testes
 
 ## TODO List
 
-* Refatorar repositorio preparando para MS
+* Analisar codigo com sonarqube
+* EntityFramework Migrations (apenas checar)
+* Microservico de Login
+* Adicionar Jwt
+* Connection string em variavel de ambiente
+* Exception Middleware
+* Virtual delete
 * Ajustar testes
 * Adicionar swagger
-* Adicionar Jwt
 * Ajustar Rotas
 * Reescrever frontend

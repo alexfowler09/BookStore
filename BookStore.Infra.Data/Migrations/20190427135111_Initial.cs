@@ -8,7 +8,7 @@ namespace BookStore.Infra.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "Author",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -16,7 +16,7 @@ namespace BookStore.Infra.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.PrimaryKey("PK_Author", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,9 +32,9 @@ namespace BookStore.Infra.Data.Migrations
                 {
                     table.PrimaryKey("PK_Book", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Book_Authors_AuthorId",
+                        name: "FK_Book_Author_AuthorId",
                         column: x => x.AuthorId,
-                        principalTable: "Authors",
+                        principalTable: "Author",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -51,7 +51,7 @@ namespace BookStore.Infra.Data.Migrations
                 name: "Book");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Author");
         }
     }
 }

@@ -16,8 +16,8 @@ namespace BookStore.Domain.Entities
         public Guid Id { get; set ; }
 
         [NotMapped]
-        public List<ValidationError> Validations { get; protected set; }
+        internal List<ValidationError> Validations { get; private set; }
 
-        public abstract bool IsValid();
+        internal abstract bool IsValid();
     }
 }

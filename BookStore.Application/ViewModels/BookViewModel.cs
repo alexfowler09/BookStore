@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BookStore.Application.ViewModels.Interfaces;
+using System;
 
 namespace BookStore.Application.ViewModels
 {
-    public class BookViewModel
+    public class BookViewModel : IBaseViewModel
     {
         public Guid? Id { get; set; }
         public string Title { get; set; }

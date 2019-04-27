@@ -31,7 +31,7 @@ namespace BookStore.Domain.Services
             return _baseRepository.GetAll();
         }
 
-        public TEntity GetBydId(Guid id)
+        public TEntity GetById(Guid id)
         {
             return _baseRepository.GetById(id);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Application.Interfaces;
+using BookStore.Application.Notifications;
 using BookStore.Application.Services;
 using BookStore.Domain.Interfaces.Repositories;
 using BookStore.Domain.Interfaces.Services;
@@ -88,6 +89,7 @@ namespace BookStore.Api
             services.AddScoped<IAuthorRepository, AuthorRepository>();
 
             services.AddScoped<IDomainNotificationHandler, DomainNotificationHandler>();
+            services.AddScoped<IServiceNotificationHandler, ServiceNotificationHandler>();
         }
     }
 }

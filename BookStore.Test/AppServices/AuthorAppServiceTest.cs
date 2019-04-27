@@ -1,4 +1,5 @@
-﻿using BookStore.Application.Services;
+﻿using BookStore.Application.Notifications;
+using BookStore.Application.Services;
 using BookStore.Application.ViewModels;
 using BookStore.Domain.Notifications;
 using BookStore.Domain.Services;
@@ -22,6 +23,7 @@ namespace BookStore.Test.AppServices
         private AuthorService authorService { get; }
         private AuthorAppService authorAppService { get; }
         private DomainNotificationHandler domainNotificationHandler { get; }
+        private ServiceNotificationHandler serviceNotificationHandler { get; }
 
         public AuthorAppServiceTest()
         {
@@ -29,9 +31,10 @@ namespace BookStore.Test.AppServices
             MockRepository = new EFMockRepository(Db);
 
             domainNotificationHandler = new DomainNotificationHandler();
+            serviceNotificationHandler = new ServiceNotificationHandler();
             authorRepository = new AuthorRepository(Db);
             authorService = new AuthorService(authorRepository, domainNotificationHandler);
-            authorAppService = new AuthorAppService(authorService);
+            authorAppService = new AuthorAppService(authorService, domainNotificationHandler, serviceNotificationHandler);
         }
 
         [Fact]

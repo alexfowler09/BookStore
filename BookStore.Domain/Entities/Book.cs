@@ -11,7 +11,7 @@ namespace BookStore.Domain.Entities
 
         public virtual Author Author { get; set; }
 
-        public override bool IsValid()
+        internal override bool IsValid()
         {
             Validate();
             return !Validations.Any();

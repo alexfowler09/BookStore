@@ -1,5 +1,5 @@
-﻿using BookStore.Api.Extensions;
-using BookStore.Application.Interfaces;
+﻿using BookStore.Application.Interfaces;
+using BookStore.Application.Notifications;
 using BookStore.Application.ViewModels;
 using BookStore.Domain.Notifications;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +10,14 @@ using System.Net;
 namespace BookStore.Api.Controllers
 {
     [Route("api/book")]
-    public class BookController : Controller
+    public class BookController : BaseController
     {
-        private readonly IBookAppService _bookAppService;
-        private readonly IDomainNotificationHandler _domainNotificationHandler;
+        private readonly IBookAppService _bookAppService;        
 
-        public BookController(IBookAppService bookAppService, IDomainNotificationHandler domainNotificationHandler)
+        public BookController(IBookAppService bookAppService, IServiceNotificationHandler serviceNotificationHandler)
+            : base (serviceNotificationHandler)
         {
-            _bookAppService = bookAppService;
-            _domainNotificationHandler = domainNotificationHandler;
+            _bookAppService = bookAppService;            
         }
         
         [HttpGet]
@@ -40,7 +39,7 @@ namespace BookStore.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetById(Guid id)
-        {
+        {   
             var ret = _bookAppService.GetById(id);
             if (ret == null)
                 return NotFound();
@@ -55,26 +54,19 @@ namespace BookStore.Api.Controllers
         {
             var newId = _bookAppService.Add(book);
 
-            if (newId == null)            
-                return BadRequest(_bookAppService.Validations);
-
-            if (_domainNotificationHandler.HasNotifications())
-                return BadRequest(_domainNotificationHandler.GetNotifications());
+            if (newId == null)
+                return ResponseBadRequest();
 
             return Ok(_bookAppService.GetById(newId.Value));
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]        
         public IActionResult Update([FromBody] BookViewModel book)
         {
             if (!_bookAppService.Update(book))
-                return NotFound(book);
-
-            if (_domainNotificationHandler.HasNotifications())
-                return BadRequest(_domainNotificationHandler.GetNotifications());
+                return ResponseBadRequest();
 
             return Ok(_bookAppService.GetById(book.Id.Value));
         }

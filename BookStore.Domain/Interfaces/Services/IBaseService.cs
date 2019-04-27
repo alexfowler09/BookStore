@@ -7,7 +7,7 @@ namespace BookStore.Domain.Interfaces.Services
     public interface IBaseService<TEntity> : IDisposable where TEntity : Entity<TEntity>
     {
         void Add(TEntity obj);
-        TEntity GetBydId(Guid id);
+        TEntity GetById(Guid id);
         IEnumerable<TEntity> GetAll();
         void Update(TEntity obj);
         void Remove(Guid id);

@@ -1,23 +1,26 @@
 ﻿using BookStore.Application.Interfaces;
+using BookStore.Application.Notifications;
 using BookStore.Application.ViewModels;
-using BookStore.Domain;
 using BookStore.Domain.Entities;
 using BookStore.Domain.Interfaces.Services;
+using BookStore.Domain.Notifications;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BookStore.Application.Services
-{    
-    public class BookAppService : IBookAppService
+{
+    public class BookAppService : BaseAppService<BookViewModel, Book>, IBookAppService
     {
         private readonly IBookService _bookService;
-        public List<ValidationError> Validations { get; private set; }
+        private readonly IServiceNotificationHandler _serviceNotificationHandler;
 
-        public BookAppService(IBookService bookService)
+        public BookAppService(IBookService bookService, 
+            IDomainNotificationHandler domainNotificationHandler,
+            IServiceNotificationHandler serviceNotificationHandler) 
+            : base(bookService, domainNotificationHandler, serviceNotificationHandler)
         {
             _bookService = bookService;
-            Validations = new List<ValidationError>();
+            _serviceNotificationHandler = serviceNotificationHandler;
         }
 
         public IEnumerable<BookViewModel> GetAllByTitleAscending()
@@ -39,126 +42,65 @@ namespace BookStore.Application.Services
             foreach (var book in books)
                 ret.Add(MapEntityToViewModel(book));
 
-            return ret;            
-        }
-
-        public Guid? Add(BookViewModel book)
-        {
-            var newBook = MapViewModelToEntity(book);
-
-            if (!IsBusinessValid(newBook))
-                return null;
-
-            _bookService.Add(newBook);
-            return newBook.Id;
-        }
-
-        public BookViewModel GetById(Guid id)
-        {
-            var book = _bookService.GetBydId(id);            
-            return MapEntityToViewModel(book);
-        }
-
-        public IEnumerable<BookViewModel> GetAll()
-        {
-            var ret = new List<BookViewModel>();
-
-            var books = _bookService.GetAll();
-            foreach (var book in books)
-                ret.Add(MapEntityToViewModel(book));
-
             return ret;
         }
 
-        public bool Update(BookViewModel book)
+        protected override bool UpdateRecord(BookViewModel viewModel)
         {
-            var updatedBook = _bookService.GetBydId(book.Id.Value);
+            var updatedBook = _bookService.GetById(viewModel.Id.Value);            
 
             if (updatedBook == null)
             {
-                Validations.Add(new ValidationError("Book", "Registro não encontrado para o Id informado"));
+                NotifyRecordNotFound(updatedBook.GetType().Name, "Registro não encontrado para o Id informado");
                 return false;
             }
 
-            updatedBook.Title = book.Title;
-            updatedBook.StockQty = book.StockQty;
-            updatedBook.AuthorId = book.AuthorId;
+            updatedBook.Title = viewModel.Title;
+            updatedBook.StockQty = viewModel.StockQty;
+            updatedBook.AuthorId = viewModel.AuthorId;
 
-            if (!IsBusinessValid(updatedBook))
-                return false;
-
-            _bookService.Update(updatedBook);
-
-            return true;
+            return ProcessUpdate(updatedBook);
         }
 
-        private bool IsBusinessValid(Book book)
+        protected override void BusinessValidation(Book entity)
         {
-            if (_bookService.TitleExists(book.Id, book.Title))            
-                Validations.Add(new ValidationError("Book", "Já existe um livro cadastrado com o título informado"));
-
-            return !Validations.Any();
+            if (_bookService.TitleExists(entity.Id, entity.Title))
+                _serviceNotificationHandler.Add(new ServiceNotification("Book", "Já existe um livro cadastrado com o título informado"));            
         }
 
-        public bool Remove(Guid id)
+        protected override BookViewModel MapEntityToViewModel(Book entity)
         {
-            if (_bookService.GetBydId(id) == null)
-                return false;
-
-            _bookService.Remove(id);
-            return true;            
-        }
-
-        private Book MapViewModelToEntity(BookViewModel book)
-        {
-            var ret = new Book();
-
-            if (book != null)
-            {
-                ret.Id = book.Id.HasValue ? book.Id.Value : Guid.NewGuid();
-                ret.Title = book.Title;
-                ret.StockQty = book.StockQty;
-                ret.AuthorId = book.AuthorId;
-            }
-
-            return ret;
-        }
-
-        private BookViewModel MapEntityToViewModel(Book book)
-        {
-            if (book == null)
+            if (entity == null)
                 return null;
             else
             {
                 var ret = new BookViewModel();
-                
-                ret.Id = book.Id;
-                ret.Title = book.Title;
-                ret.StockQty = book.StockQty;
-                ret.AuthorId = book.AuthorId;
 
-                ret.Author.Id = book.AuthorId;
-                ret.Author.Name = book.Author.Name;                
+                ret.Id = entity.Id;
+                ret.Title = entity.Title;
+                ret.StockQty = entity.StockQty;
+                ret.AuthorId = entity.AuthorId;
+
+                ret.Author.Id = entity.AuthorId;
+                ret.Author.Name = entity.Author.Name;
 
                 return ret;
             }
         }
 
-        public void Dispose()
+        protected override Book MapViewModelToEntity(BookViewModel viewModel)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            var ret = new Book();
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                _bookService.Dispose();
-        }
+            if (viewModel != null)
+            {
+                ret.Id = viewModel.Id.HasValue ? viewModel.Id.Value : Guid.NewGuid();
+                ret.Title = viewModel.Title;
+                ret.StockQty = viewModel.StockQty;
+                ret.AuthorId = viewModel.AuthorId;
+            }
 
-        ~BookAppService()
-        {
-            Dispose(false);
-        }
+            return ret;
+        }        
     }
 }

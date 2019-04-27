@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace BookStore.Domain.Entities
@@ -10,7 +9,7 @@ namespace BookStore.Domain.Entities
         
         public virtual ICollection<Book> Books { get; set; }
 
-        public override bool IsValid()
+        internal override bool IsValid()
         {
             Validate();
             return !Validations.Any();

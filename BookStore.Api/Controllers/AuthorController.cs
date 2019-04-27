@@ -1,6 +1,6 @@
 ﻿using BookStore.Application.Interfaces;
+using BookStore.Application.Notifications;
 using BookStore.Application.ViewModels;
-using BookStore.Domain.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,15 +9,15 @@ using System.Net;
 namespace BookStore.Api.Controllers
 {
     [Route("api/author")]
-    public class AuthorController : Controller
+    public class AuthorController : BaseController
     {
-        private readonly IAuthorAppService _authorAppService;
-        private readonly IDomainNotificationHandler _domainNotificationHandler;
+        private readonly IAuthorAppService _authorAppService;        
 
-        public AuthorController(IAuthorAppService authorAppService, IDomainNotificationHandler domainNotificationHandler)
+        public AuthorController(IAuthorAppService authorAppService, IServiceNotificationHandler serviceNotificationHandler)
+            : base (serviceNotificationHandler)
         {
             _authorAppService = authorAppService;
-            _domainNotificationHandler = domainNotificationHandler;
+            
         }
 
         [HttpGet]
@@ -43,32 +43,26 @@ namespace BookStore.Api.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Add([FromBody] AuthorViewModel Author)
+        public IActionResult Add([FromBody] AuthorViewModel author)
         {
-            var newId = _authorAppService.Add(Author);
+            var newId = _authorAppService.Add(author);
 
             if (newId == null)
-                return BadRequest(_authorAppService.Validations);
-
-            if (_domainNotificationHandler.HasNotifications())
-                return BadRequest(_domainNotificationHandler.GetNotifications());
+                return ResponseBadRequest();
 
             return Ok(_authorAppService.GetById(newId.Value));
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Update([FromBody] AuthorViewModel Author)
+        public IActionResult Update([FromBody] AuthorViewModel author)
         {
-            if (!_authorAppService.Update(Author))
-                return NotFound(Author);
+            if (!_authorAppService.Update(author))
+                return ResponseBadRequest();
 
-            if (_domainNotificationHandler.HasNotifications())
-                return BadRequest(_domainNotificationHandler.GetNotifications());
-
-            return Ok(Author);
+            return Ok(_authorAppService.GetById(author.Id.Value));
         }
 
         [HttpDelete("{id:guid}")]

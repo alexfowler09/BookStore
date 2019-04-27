@@ -12,6 +12,9 @@ namespace BookStore.Infra.Data.Mappings
             author.Property(a => a.Name)
                 .HasColumnType("varchar(150)")
                 .IsRequired();
+
+            author
+                .ToTable("Author");
         }
     }
 }
