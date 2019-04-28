@@ -4,6 +4,7 @@ Projeto de Testes
 
 ## TODO List
 
+* Implementar async no codigo
 * Analisar codigo com sonarqube
 * EntityFramework Migrations (apenas checar)
 * Microservico de Login
@@ -12,6 +13,5 @@ Projeto de Testes
 * Exception Middleware
 * Virtual delete
 * Ajustar testes
-* Adicionar swagger
 * Ajustar Rotas
 * Reescrever frontend
