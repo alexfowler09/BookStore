@@ -1,5 +1,7 @@
 dasdasdsadsadas
 another line
+more on new line
 dasdsadasdsa
 line to rebase
 new line to rebase
+another new line
