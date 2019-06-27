@@ -3,6 +3,7 @@ another line
 more on new line
 dasdsadasdsa
 first-feature
+fifth-feature
 08h49
 line to rebase
 develop
@@ -11,6 +12,7 @@ new line to rebase
 first-feature
 21h44m
 second-feature
+fifth-feature
 27/06/2019
 another new line
 second-feature
