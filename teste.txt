@@ -5,16 +5,19 @@ dasdsadasdsa
 sixth-feature
 first-feature
 fifth-feature
+seventh-feature
 sixth-feature
 08h49
 sixth-feature
 line to rebase
 sixth-feature
 develop
+seventh-feature
 22h12m
 new line to rebase
 first-feature
 sixth-feature
+seventh-feature
 sixth-feature
 21h44m
 second-feature
