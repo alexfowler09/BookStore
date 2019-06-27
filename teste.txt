@@ -2,8 +2,10 @@ dasdasdsadsadas
 another line
 more on new line
 dasdsadasdsa
+first-feature
 line to rebase
 develop
 new line to rebase
+first-feature
 another new line
 20h15m
