@@ -7,6 +7,7 @@ line to rebase
 develop
 new line to rebase
 first-feature
+21h44m
 second-feature
 another new line
 second-feature
