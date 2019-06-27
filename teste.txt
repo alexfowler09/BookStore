@@ -3,6 +3,7 @@ another line
 more on new line
 dasdsadasdsa
 line to rebase
+develop
 new line to rebase
 another new line
 20h15m
