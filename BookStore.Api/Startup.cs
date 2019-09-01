@@ -78,7 +78,7 @@ namespace BookStore.Api
         private void RegisterServices(IServiceCollection services)
         {
             services.AddDbContext<BookStoreContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BookStoreConnectionString")));            
+                options.UseMySql(Configuration.GetConnectionString("BookStoreConnectionString")));            
 
             services.AddScoped<IBookAppService, BookAppService>();
             services.AddScoped<IAuthorAppService, AuthorAppService>();

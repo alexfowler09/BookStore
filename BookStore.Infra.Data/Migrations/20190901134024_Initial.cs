@@ -39,14 +39,25 @@ namespace BookStore.Infra.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Author",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("50eea480-81c8-4387-84a6-0258f6607e4a"), "Autor1" });
+
+            migrationBuilder.InsertData(
+                table: "Author",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("c9636af3-f5a9-4c30-ae21-9be184e11e02"), "Autor2" });
+
+            migrationBuilder.InsertData(
+                table: "Author",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("4d0644a9-4db6-4f1a-8782-b3caa36a1b5a"), "Autor3" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Book_AuthorId",
                 table: "Book",
                 column: "AuthorId");
-
-            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( '2ac6363f-2f9f-4333-9711-829262fc2916', 'Autor1')");
-            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( 'c0012f3b-7c84-4e61-9190-54a0ea2ec534', 'Autor2')");
-            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( '019d37e8-5af8-4a04-9f68-f463b061f8ad', 'Autor3')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

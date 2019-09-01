@@ -50,7 +50,7 @@ namespace BookStore.Test.AppServices
             MockRepository.Add(author2);
 
             List<AuthorViewModel> authors = ServiceGetAll();
-            authors.Should().HaveCount(2);
+            authors.Should().HaveCount(5);
         }
 
         private List<AuthorViewModel> ServiceGetAll()

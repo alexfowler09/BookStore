@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using BookStore.Infra.Data.Mappings;
 using BookStore.Infra.Data.Extensions;
+using System;
 
 namespace BookStore.Infra.Data.Context
 {
@@ -22,6 +23,15 @@ namespace BookStore.Infra.Data.Context
         {
             modelBuilder.AddConfiguration(new BookMapping());
             modelBuilder.AddConfiguration(new AuthorMapping());
+
+            modelBuilder.Entity<Author>().HasData(
+                new Author { Id = Guid.NewGuid(), Name = "Autor1" });
+
+            modelBuilder.Entity<Author>().HasData(
+                new Author { Id = Guid.NewGuid(), Name = "Autor2" });
+
+            modelBuilder.Entity<Author>().HasData(
+                new Author { Id = Guid.NewGuid(), Name = "Autor3" });
 
             base.OnModelCreating(modelBuilder);
         }

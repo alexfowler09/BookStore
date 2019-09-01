@@ -17,7 +17,7 @@ namespace BookStore.Infra.Data.Context
 
             var builder = new DbContextOptionsBuilder<BookStoreContext>();
             var connectionString = configuration.GetConnectionString("BookStoreConnectionString");
-            builder.UseSqlServer(connectionString);
+            builder.UseMySql(connectionString);
 
             return new BookStoreContext(builder.Options);
         }

@@ -3,23 +3,21 @@ using System;
 using BookStore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.Infra.Data.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20190427135111_Initial")]
+    [Migration("20190901134024_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("BookStore.Domain.Entities.Author", b =>
                 {
@@ -33,6 +31,23 @@ namespace BookStore.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Author");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("50eea480-81c8-4387-84a6-0258f6607e4a"),
+                            Name = "Autor1"
+                        },
+                        new
+                        {
+                            Id = new Guid("c9636af3-f5a9-4c30-ae21-9be184e11e02"),
+                            Name = "Autor2"
+                        },
+                        new
+                        {
+                            Id = new Guid("4d0644a9-4db6-4f1a-8782-b3caa36a1b5a"),
+                            Name = "Autor3"
+                        });
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Book", b =>
