@@ -13,10 +13,10 @@ Como não existe uma tela de cadastro de autor, para fins de testes, ao criar o 
 
 # Utilizado no desenvolvimento
 
-Visual Studio 2017;
-.NET Core 2.2;
-MySQL 8;
-Angular 5.2;
+* Visual Studio 2017;
+* .NET Core 2.2;
+* MySQL 8;
+* Angular 5.2;
 
 # Para o backend é necessário realizar os passos abaixo para criar o banco de dados MySql
 
