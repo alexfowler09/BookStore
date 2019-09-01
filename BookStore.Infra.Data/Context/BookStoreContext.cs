@@ -25,18 +25,5 @@ namespace BookStore.Infra.Data.Context
 
             base.OnModelCreating(modelBuilder);
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json")))
-        //    {
-        //        var config = new ConfigurationBuilder()
-        //            .SetBasePath(Directory.GetCurrentDirectory())
-        //            .AddJsonFile("appsettings.json")
-        //            .Build();
-
-        //        optionsBuilder.UseSqlServer(config.GetConnectionString("BookStoreConnectionString"));
-        //    }
-        //}
     }
 }

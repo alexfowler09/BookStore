@@ -26,11 +26,9 @@ export class ManageBookComponent implements OnInit {
       this.id = params['id'];      
     });    
 
-    if (this.id == null){        
-      this.resetForm();
-    }
-    else{        
-      this.resetForm();
+    this.resetForm();
+
+    if (this.id){        
       this.bookService.getBook(this.id);      
     }
   }

@@ -7,13 +7,13 @@ namespace BookStore.Infra.Data.Mappings
 {
     public class AuthorMapping : EntityTypeConfiguration<Author>
     {
-        public override void Map(EntityTypeBuilder<Author> author)
+        public override void Map(EntityTypeBuilder<Author> builder)
         {
-            author.Property(a => a.Name)
+            builder.Property(a => a.Name)
                 .HasColumnType("varchar(150)")
                 .IsRequired();
 
-            author
+            builder
                 .ToTable("Author");
         }
     }

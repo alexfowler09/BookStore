@@ -43,6 +43,10 @@ namespace BookStore.Infra.Data.Migrations
                 name: "IX_Book_AuthorId",
                 table: "Book",
                 column: "AuthorId");
+
+            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( '2ac6363f-2f9f-4333-9711-829262fc2916', 'Autor1')");
+            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( 'c0012f3b-7c84-4e61-9190-54a0ea2ec534', 'Autor2')");
+            migrationBuilder.Sql("INSERT INTO AUTHOR VALUES ( '019d37e8-5af8-4a04-9f68-f463b061f8ad', 'Autor3')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

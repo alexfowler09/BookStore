@@ -4,7 +4,7 @@ namespace BookStore.Application.Notifications
 {
     public interface IServiceNotificationHandler
     {
-        void Add(ServiceNotification domainNotification);
+        void Add(ServiceNotification serviceNotification);
         bool HasNotifications();
         List<ServiceNotification> GetNotifications();
     }

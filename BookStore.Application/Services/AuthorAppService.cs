@@ -57,7 +57,7 @@ namespace BookStore.Application.Services
 
             if (updatedAuthor == null)
             {
-                NotifyRecordNotFound(updatedAuthor.GetType().Name, "Registro não encontrado para o Id informado");
+                NotifyRecordNotFound(typeof(Author).Name, "Registro não encontrado para o Id informado");
                 return false;
             }
 

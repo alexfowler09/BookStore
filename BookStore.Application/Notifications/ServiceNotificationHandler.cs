@@ -12,9 +12,9 @@ namespace BookStore.Application.Notifications
             _notifications = new List<ServiceNotification>();
         }
 
-        public void Add(ServiceNotification notification)
+        public void Add(ServiceNotification serviceNotification)
         {
-            _notifications.Add(notification);
+            _notifications.Add(serviceNotification);
         }
 
         public List<ServiceNotification> GetNotifications()

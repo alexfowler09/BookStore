@@ -15,7 +15,7 @@ export class AuthorService {
   authorList: Author[];
   apiUrl: string;
   constructor(private http : Http) { 
-    this.apiUrl = 'http://localhost:64861/author/';     
+    this.apiUrl = 'http://localhost:64861/api/author/';     
   }
 
   handleError(error: Response){        
@@ -27,7 +27,12 @@ export class AuthorService {
     var url = (this.apiUrl)    
     this.http.get(url)
     .map((data: Response) => {
-      return data.json() as Author[];
+      let authors = data.json() as Author[];
+      let author = new Author();
+      author.Id = null;
+      author.Name = '';
+      authors.push(author);
+      return authors.sort((a, b) => { if (a.Name > b.Name) return 1; else return -1; }); 
     }).toPromise().then(x => {
       this.authorList = x;
     })

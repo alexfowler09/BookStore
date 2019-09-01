@@ -18,7 +18,7 @@ namespace BookStore.Application.Services
         private readonly IDomainNotificationHandler _domainNotificationHandler;
         private readonly IServiceNotificationHandler _serviceNotificationHandler;        
 
-        public BaseAppService(IBaseService<TEntity> baseService, 
+        protected BaseAppService(IBaseService<TEntity> baseService, 
             IDomainNotificationHandler domainNotificationHandler,
             IServiceNotificationHandler serviceNotificationHandler)
         {

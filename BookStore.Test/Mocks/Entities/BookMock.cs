@@ -3,7 +3,7 @@ using System;
 
 namespace BookStore.Test.Mocks.Entities
 {
-    public class BookMock
+    public static class BookMock
     {
         public static Book GetWithNoStock(string key)
         {

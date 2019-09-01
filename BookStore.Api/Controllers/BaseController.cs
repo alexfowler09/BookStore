@@ -5,7 +5,7 @@ namespace BookStore.Api.Controllers
 {
     public class BaseController : Controller
     {
-        IServiceNotificationHandler _serviceNotificationHandler;
+        private readonly IServiceNotificationHandler _serviceNotificationHandler;
 
         public BaseController(IServiceNotificationHandler serviceNotificationHandler)
         {

@@ -3,7 +3,7 @@ using System;
 
 namespace BookStore.Test.Mocks.Entities
 {
-    public class AuthorMock
+    public static class AuthorMock
     {
         public static Author Get(string key)
         {

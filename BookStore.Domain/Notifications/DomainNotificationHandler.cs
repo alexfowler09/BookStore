@@ -14,9 +14,9 @@ namespace BookStore.Domain.Notifications
             _notifications = new List<DomainNotification>();
         }
 
-        public void Add (DomainNotification notification)
+        public void Add (DomainNotification domainNotification)
         {
-            _notifications.Add(notification);
+            _notifications.Add(domainNotification);
         }
 
         public List<DomainNotification> GetNotifications()

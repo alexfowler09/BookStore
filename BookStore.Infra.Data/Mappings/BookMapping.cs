@@ -7,24 +7,24 @@ namespace BookStore.Infra.Data.Mappings
 {
     public class BookMapping : EntityTypeConfiguration<Book>
     {
-        public override void Map(EntityTypeBuilder<Book> book)
+        public override void Map(EntityTypeBuilder<Book> builder)
         {
-            book.Property(b => b.Title)
+            builder.Property(b => b.Title)
                 .IsRequired()
                 .HasColumnType("varchar(150)");                
 
-            book.Property(b => b.StockQty)
+            builder.Property(b => b.StockQty)
                 .IsRequired();
 
-            book.Property(b => b.AuthorId)
+            builder.Property(b => b.AuthorId)
                 .IsRequired();
 
-            book
+            builder
                 .HasOne(b => b.Author)
                 .WithMany(b => b.Books)
                 .HasForeignKey(b => b.AuthorId);
 
-            book
+            builder
                 .ToTable("Book");
         }
     }
