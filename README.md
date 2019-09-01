@@ -1,8 +1,24 @@
 # BookStore
 
-Projeto de Testes
+Projeto de Testes de um CRUD de Livraria
 
-# Para o backend é necessário realizar os passos abaixo para criar o banco de dados SqlServer
+Como não existe uma tela de cadastro de autor, para fins de testes, ao criar o banco de dados alguns autores são adicionados automaticamente
+
+# Funciondalides
+
+* Incluir, Alterar (vinculando a um Autor) e Excluir Livros 
+* Não permite cadastrar livros com o mesmo título
+* Não permite cadastrar livros com quantidade em estoque negativa
+* Listar todos os livros ou somente livros em estoque
+
+# Utilizado no desenvolvimento
+
+Visual Studio 2017
+MySQL 8
+.NET Core 2.2
+Angular 5.2
+
+# Para o backend é necessário realizar os passos abaixo para criar o banco de dados MySql
 
 No Visual Studio:
 * Dentro do projeto BookStore.Api, no appsettings.json alterar a BookStoreConnectionString;
